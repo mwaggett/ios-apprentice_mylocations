@@ -41,6 +41,17 @@ class CurrentLocationViewController: UIViewController,
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
   }
+  
+  override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    if segue.identifier == "TagLocation" {
+      let navigationController = segue.destinationViewController
+                                              as! UINavigationController
+      let controller = navigationController.topViewController
+                                              as! LocationDetailsViewController
+      controller.coordinate = location!.coordinate
+      controller.placemark = placemark
+    }
+  }
 
   @IBAction func getLocation() {
     let authStatus = CLLocationManager.authorizationStatus()
