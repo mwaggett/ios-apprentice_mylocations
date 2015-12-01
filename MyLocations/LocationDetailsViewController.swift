@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import CoreData
 
 private let dateFormatter: NSDateFormatter = {
   let formatter = NSDateFormatter()
@@ -17,16 +18,19 @@ private let dateFormatter: NSDateFormatter = {
 }()
 
 class LocationDetailsViewController: UITableViewController {
+  
+  var managedObjectContext: NSManagedObjectContext!
+  var coordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+  var placemark: CLPlacemark?
+  var categoryName = "No Category"
+  var date = NSDate()
+  
   @IBOutlet weak var descriptionTextView: UITextView!
   @IBOutlet weak var categoryLabel: UILabel!
   @IBOutlet weak var latitudeLabel: UILabel!
   @IBOutlet weak var longitudeLabel: UILabel!
   @IBOutlet weak var addressLabel: UILabel!
   @IBOutlet weak var dateLabel: UILabel!
-  
-  var coordinate = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-  var placemark: CLPlacemark?
-  var categoryName = "No Category"
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -40,16 +44,18 @@ class LocationDetailsViewController: UITableViewController {
     } else {
       addressLabel.text = "No Address Found"
     }
-    dateLabel.text = formatDate(NSDate())
+    dateLabel.text = formatDate(date)
     
-    let gestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("hideKeyboard:"))
+    let gestureRecognizer = UITapGestureRecognizer(target: self,
+                                            action: Selector("hideKeyboard:"))
     gestureRecognizer.cancelsTouchesInView = false
     tableView.addGestureRecognizer(gestureRecognizer)
   }
   
   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
     if segue.identifier == "PickCategory" {
-      let controller = segue.destinationViewController as! CategoryPickerViewController
+      let controller = segue.destinationViewController
+                                              as! CategoryPickerViewController
       controller.selectedCategoryName = categoryName
     }
   }
@@ -63,6 +69,21 @@ class LocationDetailsViewController: UITableViewController {
   @IBAction func done() {
     let hudView = HudView.hudInView(navigationController!.view, animated: true)
     hudView.text = "Tagged"
+    
+    let location = NSEntityDescription.insertNewObjectForEntityForName(
+          "Location", inManagedObjectContext: managedObjectContext) as! Location
+    location.locationDescription = descriptionTextView.text
+    location.category = categoryName
+    location.latitude = coordinate.latitude
+    location.longitude = coordinate.longitude
+    location.date = date
+    location.placemark = placemark
+    
+    do {
+      try managedObjectContext.save()
+    } catch {
+      fatalCoreDataError(error)
+    }
     
     afterDelay(0.8) {
       self.dismissViewControllerAnimated(true, completion: nil)
@@ -112,20 +133,24 @@ class LocationDetailsViewController: UITableViewController {
   
   // MARK: - UITableViewDelegate
   
-  override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+  override func tableView(tableView: UITableView,
+                    heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
     if indexPath.section == 0 && indexPath.row == 0 {
       return 88
     } else if indexPath.section == 2 && indexPath.row == 2 {
-      addressLabel.frame.size = CGSize(width: view.bounds.size.width - 115, height: 10000)
+      addressLabel.frame.size = CGSize(width: view.bounds.size.width - 115,
+                                        height: 10000)
       addressLabel.sizeToFit()
-      addressLabel.frame.origin.x = view.bounds.size.width - addressLabel.frame.size.width - 15
+      addressLabel.frame.origin.x =
+                    view.bounds.size.width - addressLabel.frame.size.width - 15
       return addressLabel.frame.size.height + 20
     } else {
       return 44
     }
   }
   
-  override func tableView(tableView: UITableView, willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
+  override func tableView(tableView: UITableView,
+              willSelectRowAtIndexPath indexPath: NSIndexPath) -> NSIndexPath? {
     if indexPath.section == 0 || indexPath.section == 1 {
       return indexPath
     } else {
@@ -133,7 +158,8 @@ class LocationDetailsViewController: UITableViewController {
     }
   }
   
-  override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+  override func tableView(tableView: UITableView,
+                              didSelectRowAtIndexPath indexPath: NSIndexPath) {
     if indexPath.section == 0 && indexPath.row == 0 {
       descriptionTextView.becomeFirstResponder()
     }
