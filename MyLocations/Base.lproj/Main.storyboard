@@ -95,7 +95,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W5J-7L-Pyd" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="508" y="-853"/>
+            <point key="canvasLocation" x="705" y="-717"/>
         </scene>
         <!--Tag Location-->
         <scene sceneID="Z7x-b4-vrT">
@@ -489,6 +489,9 @@
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
+                                <connections>
+                                    <outlet property="delegate" destination="9vn-pL-IWP" id="axM-JN-mrf"/>
+                                </connections>
                             </navigationBar>
                         </subviews>
                         <animations/>
@@ -497,11 +500,12 @@
                     <tabBarItem key="tabBarItem" title="Map" id="3Cr-gI-ZyS"/>
                     <connections>
                         <outlet property="mapView" destination="OSs-go-iTX" id="je7-f3-ui7"/>
+                        <segue destination="E2z-tN-grd" kind="modal" identifier="EditLocation" id="IGt-2T-MOR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2I8-iy-LD2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="508" y="768"/>
+            <point key="canvasLocation" x="705" y="734"/>
         </scene>
         <!--Locations-->
         <scene sceneID="oNH-ud-wSB">
@@ -545,6 +549,6 @@
         <image name="first" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="SOB-Yu-JPd"/>
+        <segue reference="IGt-2T-MOR"/>
     </inferredMetricsTieBreakers>
 </document>
