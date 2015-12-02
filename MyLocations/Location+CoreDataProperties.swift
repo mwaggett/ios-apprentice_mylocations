@@ -21,5 +21,5 @@ extension Location {
     @NSManaged var category: String
     @NSManaged var locationDescription: String
     @NSManaged var placemark: CLPlacemark?
-
+    @NSManaged var photoID: NSNumber?
 }

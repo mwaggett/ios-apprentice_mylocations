@@ -9,6 +9,11 @@
 import Foundation
 import Dispatch
 
+let applicationDocumentsDirectory: String = {
+  let paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+  return paths[0]
+}()
+
 func afterDelay(seconds: Double, closure: () -> ()) {
   let when = dispatch_time(DISPATCH_TIME_NOW,
                             Int64(seconds * Double(NSEC_PER_SEC)))

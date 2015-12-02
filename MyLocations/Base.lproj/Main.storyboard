@@ -179,6 +179,11 @@
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="i9D-El-n3V">
+                                                    <rect key="frame" x="99" y="0.0" width="188" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                                    <animations/>
+                                                </imageView>
                                             </subviews>
                                             <animations/>
                                         </tableViewCellContentView>
@@ -321,10 +326,12 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="addPhotoLabel" destination="K7z-wX-zCL" id="2QU-gl-G73"/>
                         <outlet property="addressLabel" destination="pzE-Lg-NZy" id="oJL-9s-tHf"/>
                         <outlet property="categoryLabel" destination="7Ym-4I-6dH" id="hNE-bS-hAc"/>
                         <outlet property="dateLabel" destination="2GM-s4-QwT" id="Jb2-2a-cIo"/>
                         <outlet property="descriptionTextView" destination="oys-OQ-KOG" id="yGQ-Ys-fzC"/>
+                        <outlet property="imageView" destination="i9D-El-n3V" id="qFi-99-AzI"/>
                         <outlet property="latitudeLabel" destination="eeW-Vi-Oyg" id="meY-nH-dnr"/>
                         <outlet property="longitudeLabel" destination="EVp-yU-MGg" id="EKi-IQ-X8o"/>
                     </connections>
@@ -418,7 +425,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="100" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6Cd-lg-Z2D">
-                                            <rect key="frame" x="8" y="0.0" width="304" height="21"/>
+                                            <rect key="frame" x="82" y="0.0" width="238" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
@@ -426,13 +433,18 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" tag="101" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Address" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="9ma-GX-2rH">
-                                            <rect key="frame" x="8" y="27" width="304" height="21"/>
+                                            <rect key="frame" x="82" y="27" width="238" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="7v3-8V-Swh">
+                                            <rect key="frame" x="15" y="2" width="52" height="52"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <animations/>
+                                        </imageView>
                                     </subviews>
                                     <animations/>
                                 </tableViewCellContentView>
@@ -440,6 +452,7 @@
                                 <connections>
                                     <outlet property="addressLabel" destination="9ma-GX-2rH" id="Wuh-I4-ziR"/>
                                     <outlet property="descriptionLabel" destination="6Cd-lg-Z2D" id="2dH-LF-UlH"/>
+                                    <outlet property="photoImageView" destination="7v3-8V-Swh" id="Kx7-WP-fnV"/>
                                     <segue destination="E2z-tN-grd" kind="modal" identifier="EditLocation" id="E0X-pc-dD5"/>
                                 </connections>
                             </tableViewCell>
@@ -549,6 +562,6 @@
         <image name="first" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="IGt-2T-MOR"/>
+        <segue reference="E0X-pc-dD5"/>
     </inferredMetricsTieBreakers>
 </document>
