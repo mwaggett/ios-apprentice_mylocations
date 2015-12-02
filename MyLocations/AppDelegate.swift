@@ -24,11 +24,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
 
 
-  func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+  func application(application: UIApplication,
+          didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?)
+          -> Bool {
     let tabBarController = window!.rootViewController as! UITabBarController
     if let tabBarViewControllers = tabBarController.viewControllers {
-      let currentLocationViewController = tabBarViewControllers[0] as! CurrentLocationViewController
+      let currentLocationViewController = tabBarViewControllers[0]
+                                              as! CurrentLocationViewController
       currentLocationViewController.managedObjectContext = managedObjectContext
+      
+      let navigationController = tabBarViewControllers[1]
+                                              as! UINavigationController
+      let locationsViewController = navigationController.viewControllers[0]
+                                              as! LocationsViewController
+      locationsViewController.managedObjectContext = managedObjectContext
+      let _ = locationsViewController.view
     }
     listenForFatalCoreDataNotifications()
     return true
