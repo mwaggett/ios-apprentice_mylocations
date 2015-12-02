@@ -27,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func application(application: UIApplication,
           didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?)
           -> Bool {
+    customizeAppearance()
     let tabBarController = window!.rootViewController as! UITabBarController
     if let tabBarViewControllers = tabBarController.viewControllers {
       let currentLocationViewController = tabBarViewControllers[0]
@@ -69,6 +70,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
   }
   
+  func customizeAppearance() {
+    UINavigationBar.appearance().barTintColor = UIColor.blackColor()
+    UINavigationBar.appearance().titleTextAttributes = [
+                          NSForegroundColorAttributeName: UIColor.whiteColor() ]
+    UITabBar.appearance().barTintColor = UIColor.blackColor()
+    let tintColor = UIColor(red: 255/255.0, green: 238/255.0,
+                            blue: 136/255.0, alpha: 1.0)
+    UITabBar.appearance().tintColor = tintColor
+  }
+  
   func listenForFatalCoreDataNotifications() {
     NSNotificationCenter.defaultCenter().addObserverForName(
           MyManagedObjectContextSaveDidFailNotification, object: nil,
@@ -101,21 +112,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
   lazy var managedObjectContext: NSManagedObjectContext = {
-    guard let modelURL = NSBundle.mainBundle().URLForResource("DataModel", withExtension: "momd") else {
+    guard let modelURL = NSBundle.mainBundle().URLForResource("DataModel",
+                                                  withExtension: "momd") else {
       fatalError("Could not find data model in app bundle")
     }
     guard let model = NSManagedObjectModel(contentsOfURL: modelURL) else {
       fatalError("Error initializing model from \(modelURL)")
     }
-    let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+    let urls = NSFileManager.defaultManager().URLsForDirectory(
+                                .DocumentDirectory, inDomains: .UserDomainMask)
     let documentsDirectory = urls[0]
-    let storeURL = documentsDirectory.URLByAppendingPathComponent("DataStore.sqlite")
+    let storeURL = documentsDirectory.URLByAppendingPathComponent(
+                                                            "DataStore.sqlite")
     print(storeURL)
     
     do {
       let coordinator = NSPersistentStoreCoordinator(managedObjectModel: model)
-      try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: nil)
-      let context = NSManagedObjectContext(concurrencyType: .MainQueueConcurrencyType)
+      try coordinator.addPersistentStoreWithType(NSSQLiteStoreType,
+                                configuration: nil, URL: storeURL, options: nil)
+      let context = NSManagedObjectContext(
+                                    concurrencyType: .MainQueueConcurrencyType)
       context.persistentStoreCoordinator = coordinator
       return context
     } catch {

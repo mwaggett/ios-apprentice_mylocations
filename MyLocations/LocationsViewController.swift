@@ -42,6 +42,9 @@ class LocationsViewController: UITableViewController {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    tableView.backgroundColor = UIColor.blackColor()
+    tableView.separatorColor = UIColor(white: 1.0, alpha: 0.2)
+    tableView.indicatorStyle = .White
     performFetch()
     navigationItem.rightBarButtonItem = editButtonItem()
   }
@@ -71,7 +74,7 @@ class LocationsViewController: UITableViewController {
     }
   }
   
-  //MARK: UITableViewDataSource
+  // MARK: UITableViewDataSource
   
   override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
     return fetchedResultsController.sections!.count
@@ -80,7 +83,7 @@ class LocationsViewController: UITableViewController {
   override func tableView(tableView: UITableView,
                             titleForHeaderInSection section: Int) -> String? {
     let sectionInfo = fetchedResultsController.sections![section]
-    return sectionInfo.name
+    return sectionInfo.name.uppercaseString
   }
   
   override func tableView(tableView: UITableView,
@@ -116,6 +119,33 @@ class LocationsViewController: UITableViewController {
       }
     }
   }
+  
+  // MARK: - UITableViewDelegate
+  
+  override func tableView(tableView: UITableView,
+                          viewForHeaderInSection section: Int) -> UIView? {
+    let labelRect = CGRect(x: 15, y: tableView.sectionHeaderHeight - 14,
+                           width: 300, height: 14)
+    let label = UILabel(frame: labelRect)
+    label.font = UIFont.boldSystemFontOfSize(11)
+    label.text = tableView.dataSource!.tableView!(
+                                  tableView, titleForHeaderInSection: section)
+    label.textColor = UIColor(white: 1.0, alpha: 0.4)
+    label.backgroundColor = UIColor.clearColor()
+    
+    let separatorRect = CGRect(x: 15, y: tableView.sectionHeaderHeight - 0.5,
+                          width: tableView.bounds.size.width - 15, height: 0.5)
+    let separator = UIView(frame: separatorRect)
+    separator.backgroundColor = tableView.backgroundColor
+    
+    let viewRect = CGRect(x: 0, y: 0, width: tableView.bounds.size.width,
+                                      height: tableView.sectionHeaderHeight)
+    let view = UIView(frame: viewRect)
+    view.backgroundColor = UIColor(white: 0, alpha: 0.85)
+    view.addSubview(label)
+    view.addSubview(separator)
+    return view
+  }
 }
 
 extension LocationsViewController: NSFetchedResultsControllerDelegate {
@@ -133,7 +163,8 @@ extension LocationsViewController: NSFetchedResultsControllerDelegate {
     switch type {
       case .Insert:
         print("*** NSFetchedResultsChangeInsert (object)")
-        tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+        tableView.insertRowsAtIndexPaths([newIndexPath!],
+                                                withRowAnimation: .Fade)
       
       case .Delete:
         print("*** NSFetchedResultsChangeDelete (object)")
@@ -149,8 +180,10 @@ extension LocationsViewController: NSFetchedResultsControllerDelegate {
       
       case .Move:
           print("*** NSFetchedResultsChangeMove (object)")
-          tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Fade)
-          tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Fade)
+          tableView.deleteRowsAtIndexPaths([indexPath!],
+                                                withRowAnimation: .Fade)
+          tableView.insertRowsAtIndexPaths([newIndexPath!],
+                                                withRowAnimation: .Fade)
     }
   }
   
@@ -161,11 +194,13 @@ extension LocationsViewController: NSFetchedResultsControllerDelegate {
     switch type {
       case .Insert:
         print("*** NSFetchedResultsChangeInsert (section)")
-        tableView.insertSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+        tableView.insertSections(NSIndexSet(index: sectionIndex),
+                                                withRowAnimation: .Fade)
     
       case .Delete:
         print("*** NSFetchedResultsChangeDelete (section)")
-        tableView.deleteSections(NSIndexSet(index: sectionIndex), withRowAnimation: .Fade)
+        tableView.deleteSections(NSIndexSet(index: sectionIndex),
+                                                withRowAnimation: .Fade)
       
       case .Update:
         print("***NSFetchedResultsChangeUpdate (section)")

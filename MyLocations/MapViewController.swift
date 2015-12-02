@@ -39,8 +39,10 @@ class MapViewController: UIViewController {
   
   override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
     if segue.identifier == "EditLocation" {
-      let navigationController = segue.destinationViewController as! UINavigationController
-      let controller = navigationController.topViewController as! LocationDetailsViewController
+      let navigationController = segue.destinationViewController
+                                              as! UINavigationController
+      let controller = navigationController.topViewController
+                                              as! LocationDetailsViewController
       controller.managedObjectContext = managedObjectContext
       
       let button = sender as! UIButton
@@ -63,11 +65,13 @@ class MapViewController: UIViewController {
   func updateLocations() {
     mapView.removeAnnotations(locations)
     
-    let entity = NSEntityDescription.entityForName("Location", inManagedObjectContext: managedObjectContext)
+    let entity = NSEntityDescription.entityForName("Location",
+                                  inManagedObjectContext: managedObjectContext)
     let fetchRequest = NSFetchRequest()
     fetchRequest.entity = entity
     
-    locations = try! managedObjectContext.executeFetchRequest(fetchRequest) as! [Location]
+    locations = try! managedObjectContext.executeFetchRequest(fetchRequest)
+                                                                as! [Location]
     mapView.addAnnotations(locations)
   }
   
@@ -122,21 +126,28 @@ class MapViewController: UIViewController {
 
 extension MapViewController: MKMapViewDelegate {
   
-  func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+  func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation)
+            -> MKAnnotationView? {
     guard annotation is Location else {
       return nil
     }
     let identifier = "Location"
-    var annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as! MKPinAnnotationView!
+    var annotationView =
+                mapView.dequeueReusableAnnotationViewWithIdentifier(identifier)
+                  as! MKPinAnnotationView!
     if annotationView == nil {
-      annotationView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+      annotationView = MKPinAnnotationView(annotation: annotation,
+                                            reuseIdentifier: identifier)
       annotationView.enabled = true
       annotationView.canShowCallout = true
       annotationView.animatesDrop = false
-      annotationView.pinTintColor = UIColor(red: 0.32, green: 0.82, blue: 0.4, alpha: 1)
+      annotationView.pinTintColor = UIColor(red: 0.32, green: 0.82,
+                                            blue: 0.4, alpha: 1)
+      annotationView.tintColor = UIColor(white: 0.0, alpha: 0.5)
       
       let rightButton = UIButton(type: .DetailDisclosure)
-      rightButton.addTarget(self, action: Selector("showLocationDetails:"), forControlEvents: .TouchUpInside)
+      rightButton.addTarget(self, action: Selector("showLocationDetails:"),
+                                  forControlEvents: .TouchUpInside)
       annotationView.rightCalloutAccessoryView = rightButton
     } else {
       annotationView.annotation = annotation
